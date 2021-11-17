@@ -33,7 +33,7 @@ public class PermissionCalculator {
      *      </li>
      *      <li>
      *          Super-permission at checked permission requires any one permission at base<br>
-     *          i.e. checked permission <code>permission.*.example</code> will be allowed with base permission <code>permission.<bold>anything</bold>.example</code>
+     *          i.e. checked permission <code>permission.*.example</code> will be allowed with base permission <code>permission.anything.example</code>
      *      </li>
      * </ul>
      *
@@ -46,42 +46,40 @@ public class PermissionCalculator {
      *         <code>permission.example</code> allows only itself
      *     </li>
      * </ul>
-     * Examples:
      *
-     * <table cellpadding="2" border="0">
-     *   <col width="45%"/>
-     *   <col width="45%"/>
-     *   <col width="10%"/>
-     *   <thead>
-     *     <tr><th align="center">base</th><th align="center">check</th><th align="center">result</th></tr>
-     *   <thead>
-     *   <tbody border = "1px">
-     *      <tr>
-     *          <td>example.test</td> <td>example.test</td> <td>true</td>
-     *      </tr>
-     *      <tr>
-     *          <td>example.*</td> <td>example.test</td> <td>true</td>
-     *      </tr>
-     *      <tr>
-     *          <td>example.*</td> <td>example.test.permission</td> <td>true</td>
-     *      </tr>
-     *      <tr>
-     *          <td>example.*</td> <td>example</td> <td>false</td>
-     *      </tr>
-     *      <tr>
-     *          <td>example.test</td> <td>example.*</td> <td>true</td>
-     *      </tr>
-     *      <tr>
-     *          <td>example.*.permission</td> <td>example.test.permission</td> <td>true</td>
-     *      </tr>
-     *      <tr>
-     *          <td>example.test.permission</td> <td>example.*.permission</td> <td>true</td>
-     *      </tr>
-     *      <tr>
-     *          <td>example.test.permission</td> <td>example.*</td> <td>false</td>
-     *      </tr>
-     *   </tbody>
-     * </table><br>
+     * <table style = "table-layout: fixed; width: 100%; border-collapse: collapse; border: 1px solid;">
+     *   <caption>Return examples for some passed permissions</caption>
+     *   <tr>
+     *     <th style = "text-align: center;">base</th>
+     *     <th style = "text-align: center;">check</th>
+     *     <th style = "text-align: center;">result</th>
+     *   </tr>
+     *   <tr>
+     *      <td>example.test</td> <td>example.test</td> <td>true</td>
+     *   </tr>
+     *   <tr>
+     *      <td>example.*</td> <td>example.test</td> <td>true</td>
+     *   </tr>
+     *   <tr>
+     *      <td>example.*</td> <td>example.test.permission</td> <td>true</td>
+     *   </tr>
+     *   <tr>
+     *      <td>example.*</td> <td>example</td> <td>false</td>
+     *   </tr>
+     *   <tr>
+     *      <td>example.test</td> <td>example.*</td> <td>true</td>
+     *   </tr>
+     *   <tr>
+     *      <td>example.*.permission</td> <td>example.test.permission</td> <td>true</td>
+     *   </tr>
+     *   <tr>
+     *      <td>example.test.permission</td> <td>example.*.permission</td> <td>true</td>
+     *   </tr>
+     *   <tr>
+     *      <td>example.test.permission</td> <td>example.*</td> <td>false</td>
+     *   </tr>
+     * </table>
+     * <br>
      * If anyone passed permission is null result is always false<br>
      * If checked permission is empty result is true<br>
      * <ul>

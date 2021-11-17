@@ -13,7 +13,7 @@ public @interface EventHandler {
 
     /**
      * Ignore cancelled events.<br>
-     * If event is cancelled and this is turned on (true), handler would not got event</br>
+     * If event is cancelled and this is turned on (true), handler would not get event<br>
      * by default true
      *
      * @return ignoring cancelled events
