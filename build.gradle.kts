@@ -1,5 +1,6 @@
 plugins {
-    java
+    id("java-library")
+    id("maven-publish")
 }
 
 group = "ru.cutletbots"
@@ -12,10 +13,10 @@ repositories {
 
 dependencies {
 
-    implementation("com.github.BlcDragon:objconfig:v1.0.0")
+    api("com.github.BlcDragon:objconfig:v1.0.0")
 
     //annotations
-    implementation("org.jetbrains:annotations:22.0.0")
+    api("org.jetbrains:annotations:22.0.0")
     compileOnly("org.projectlombok:lombok:1.18.22")
     annotationProcessor("org.projectlombok:lombok:1.18.22")
 
@@ -23,8 +24,8 @@ dependencies {
     testAnnotationProcessor("org.projectlombok:lombok:1.18.22")
 
     //logging
-    implementation("org.slf4j:slf4j-api:1.7.32")
-    implementation("ch.qos.logback:logback-classic:1.2.6")
+    api("org.slf4j:slf4j-api:1.7.32")
+    implementation("ch.qos.logback:logback-classic:1.2.7")
     implementation("org.slf4j:jcl-over-slf4j:1.7.32")
     implementation("org.slf4j:log4j-over-slf4j:1.7.32")
     implementation("uk.org.lidalia:sysout-over-slf4j:1.0.2")
@@ -34,7 +35,8 @@ dependencies {
 
 }
 
-val fatJar = task("fatJar", type = Jar::class) {
+val fatJar = task("cutletRunnable", type = Jar::class) {
+    group = "get-jar"
     archiveBaseName.set("${project.name}-shaded")
     manifest {
         attributes["Main-Class"] = "ru.blc.cutlet.api.Start"
@@ -43,12 +45,41 @@ val fatJar = task("fatJar", type = Jar::class) {
     with(tasks.jar.get() as CopySpec)
 }
 
+val sourcesJar by tasks.registering(Jar::class) {
+    archiveClassifier.set("sources")
+    from(sourceSets.main.get().allSource)
+}
+
 tasks {
     "build" {
         dependsOn(fatJar)
+    }
+
+    artifacts {
+        archives(sourcesJar)
+        archives(jar)
     }
 }
 
 tasks.withType<Test> {
     useJUnit()
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/cutletbots/cutlet-api")
+            credentials {
+                username = System.getenv("PACKAGE_REGISTRY_USERNAME")
+                password = System.getenv("PACKAGE_REGISTRY_TOKEN")
+            }
+        }
+    }
+    publications {
+        register("mavenJava", MavenPublication::class) {
+            from(components["java"])
+            artifact(sourcesJar.get())
+        }
+    }
 }
