@@ -59,15 +59,15 @@ public class Console implements ConsoleCommandSender {
         String[] in = input.split(" ");
         String[] cmd = in[0].split(":");
         Bot owner = null;
-        String cmdN = cmd[0];
+        String commandName = cmd[0];
         if (cmd.length == 2) {
-            cmdN = cmd[1];
+            commandName = cmd[1];
             owner = botManager.getBot(cmd[0]);
         }
-        Command command = botManager.getCommand(cmdN, owner);
+        Command command = botManager.getCommand(commandName, owner);
         if (command != null) {
             try {
-                command.dispatch(this, in[0], Arrays.copyOfRange(in, 1, in.length));
+                command.dispatch(this, commandName, Arrays.copyOfRange(in, 1, in.length));
             } catch (Exception e) {
                 LOG.error("Error while dispatching command", e);
             }
