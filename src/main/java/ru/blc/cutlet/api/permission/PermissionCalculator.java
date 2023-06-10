@@ -18,8 +18,8 @@ public class PermissionCalculator {
 
     /**
      * Check if base permission allows specified permission <br>
-     * Exluding permissions (with "-" at start) works as common (without "-" at start)<br>
-     * Thus this calls are equal:<br>
+     * Excluding permissions (with "-" at start) works as common (without "-" at start)<br>
+     * Thus these calls are equal:<br>
      * <pre>
      *     isPermissionAllows("permission.example", "permission.example");
      *     isPermissionAllows("-permission.example", "permission.example");

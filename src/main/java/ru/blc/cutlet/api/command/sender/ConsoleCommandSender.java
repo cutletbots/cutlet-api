@@ -2,6 +2,9 @@ package ru.blc.cutlet.api.command.sender;
 
 import ru.blc.cutlet.api.command.Messenger;
 
+/**
+ * For Cutlet console
+ */
 public interface ConsoleCommandSender extends CommandSender {
 
     @Override

@@ -14,6 +14,9 @@ import java.util.concurrent.DelayQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ * Used for scheduling some tasks
+ */
 public class Timer {
 
     private static final AtomicBoolean started = new AtomicBoolean(false);
@@ -54,6 +57,14 @@ public class Timer {
         tasks.forEach(this::cancelTack);
     }
 
+    /**
+     * Run task with specified delay
+     * @param plugin task owner
+     * @param delay delay
+     * @param timeUnit delay unit
+     * @param runnable task runnable
+     * @return task
+     */
     public CutletTask runTaskLaterAsync(@NotNull Plugin plugin, long delay, @NotNull TimeUnit timeUnit, @NotNull Runnable runnable) {
         Preconditions.checkState(plugin.isEnabled(), plugin.getName() + " attempted to start task while not enabled!");
         CutletTask task = new CutletTask(this, plugin, runnable, delay, timeUnit, false);
@@ -63,6 +74,14 @@ public class Timer {
         return task;
     }
 
+    /**
+     * Run repeating task
+     * @param plugin task owner
+     * @param delay repead period
+     * @param timeUnit repeat period time unit
+     * @param runnable task runnable
+     * @return task
+     */
     public CutletTask runTaskTimerAsync(@NotNull Plugin plugin, long delay, @NotNull TimeUnit timeUnit, @NotNull Runnable runnable) {
         Preconditions.checkState(plugin.isEnabled(), plugin.getName() + " attempted to start task while not enabled!");
         CutletTask task = new CutletTask(this, plugin, runnable, delay, timeUnit, true);

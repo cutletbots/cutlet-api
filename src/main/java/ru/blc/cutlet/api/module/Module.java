@@ -14,6 +14,10 @@ import ru.blc.objconfig.yml.YamlConfiguration;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * Represents module<br>
+ * Module is provider for some social APIs (for example telegram, discord, etc.)
+ */
 public class Module implements Plugin {
 
     @Getter
@@ -46,6 +50,9 @@ public class Module implements Plugin {
         }
     }
 
+    /**
+     * @return Module name
+     */
     final public String getName() {
         return getDescription().getName();
     }
@@ -81,12 +88,19 @@ public class Module implements Plugin {
         }
     }
 
+    /**
+     * Reloads configuration from config.yml
+     */
     public void reloadConfig() {
         File configFile = new File(getDirectory(), "config.yml");
         if (!configFile.exists()) return;
         config = YamlConfiguration.loadConfiguration(configFile);
     }
 
+    /**
+     * Saves default config.yml file from module jar archive<br>
+     * If file already exists does nothing
+     */
     public void saveDefaultConfig() {
         File configFile = new File(getDirectory(), "config.yml");
         if (!configFile.exists()) {
@@ -122,6 +136,12 @@ public class Module implements Plugin {
         }
     }
 
+    /**
+     * Get resource from module jar archive
+     *
+     * @param name path to resource
+     * @return Input stream of resource or null if resource not founded
+     */
     public InputStream getResourceAsStream(@NotNull String name) {
         Preconditions.checkArgument(!name.isEmpty(), "name");
         InputStream in = null;
@@ -143,12 +163,21 @@ public class Module implements Plugin {
         return in;
     }
 
+    /**
+     * Calls when module loaded. Override for own logic
+     */
     public void onLoad() {
     }
 
+    /**
+     * Calls when module enabled. Override for own logic
+     */
     public void onEnable() {
     }
 
+    /**
+     * Calls when module disabled. Override for own logic
+     */
     public void onDisable() {
     }
 }

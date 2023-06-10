@@ -22,8 +22,8 @@ public @interface EventHandler {
 
     /**
      * Some modules can fire event for only some consumers.<br>
-     * If handler ignores filter (true) than it would got event, even hadler not matches filter<br>
-     * by default false (filter would not ignored)
+     * If handler ignores filter (true) than it would get event, even handler not matches filter<br>
+     * by default false (filter would not ignore)
      *
      * @return ignore filtration
      */

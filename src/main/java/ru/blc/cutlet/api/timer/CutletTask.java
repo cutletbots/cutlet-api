@@ -7,6 +7,9 @@ import ru.blc.cutlet.api.Plugin;
 import java.util.concurrent.Delayed;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Represents running task
+ */
 public class CutletTask implements Delayed {
 
     private final Timer timer;

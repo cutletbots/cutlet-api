@@ -2,6 +2,7 @@ package ru.blc.cutlet.api.bot;
 
 import com.google.common.base.Preconditions;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.blc.cutlet.api.Cutlet;
 import ru.blc.cutlet.api.command.Command;
 import ru.blc.cutlet.api.event.*;
@@ -103,23 +104,36 @@ public class BotManager {
      * returns command by name or alias
      *
      * @param alias command name or alias
-     * @param owner command owner
+     * @param owner command owner. null for cutlet commands
      * @return command or null if no matching command founded
      */
-    public Command getCommand(String alias, Bot owner) {
+    public @Nullable Command getCommand(@NotNull String alias, @Nullable Bot owner) {
         return commandsByBots.computeIfAbsent(owner, b -> new HashMap<>()).get(alias.toLowerCase(Locale.ROOT));
     }
 
-    public Collection<Command> getCommands(Bot owner) {
+    /**
+     * @param owner command owner. null for cutlet commands
+     * @return all commands owned by specified bot
+     */
+    public @NotNull Collection<@NotNull Command> getCommands(@Nullable Bot owner) {
         return new HashSet<>(commandsByBots.getOrDefault(owner, new HashMap<>()).values());
     }
 
-    public Bot getBot(String name) {
+    /**
+     * @param name bot name
+     * @return Bot with specified name or null if no bot was found
+     */
+    public @Nullable Bot getBot(@NotNull String name) {
         return this.bots.get(name.toLowerCase(Locale.ROOT));
     }
 
+    /**
+     * @param clazz bot class
+     * @param <T>   bot
+     * @return bot for specified class or null if no bot was found
+     */
     @SuppressWarnings("unchecked")
-    public <T extends Bot> T getBot(Class<T> clazz) {
+    public <T extends Bot> @Nullable T getBot(@NotNull Class<T> clazz) {
         T r = null;
         for (Bot value : this.bots.values()) {
             if (value.getClass() == clazz) {
@@ -314,11 +328,23 @@ public class BotManager {
         }
     }
 
-    public void callEvent(Event event) {
+    /**
+     * Calls specified event
+     *
+     * @param event event to call
+     */
+    public void callEvent(@NotNull Event event) {
         this.callEvent(event, null);
     }
 
-    public void callEvent(Event event, Predicate<Bot> filter) {
+    /**
+     * Calls specified event with bot filter<br>
+     * Only bots, that's match specified filter would be called
+     *
+     * @param event  event to call
+     * @param filter bot filter
+     */
+    public void callEvent(@NotNull Event event, @Nullable Predicate<Bot> filter) {
         this.fireEvent(event, filter);
     }
 
@@ -336,8 +362,14 @@ public class BotManager {
 
     }
 
+    /**
+     * Registers events listener
+     *
+     * @param bot      bot that listen event
+     * @param listener listener
+     */
     @SuppressWarnings("unchecked")
-    public void registerEvents(Bot bot, Listener listener) {
+    public void registerEvents(@NotNull Bot bot, @NotNull Listener listener) {
         Preconditions.checkNotNull(bot, "bot");
         Preconditions.checkNotNull(listener, "Listener");
         if (!bot.isEnabled()) {
@@ -374,17 +406,25 @@ public class BotManager {
         }
     }
 
-    private HandlerList getEventListeners(Class<? extends Event> type) {
+    /**
+     * @param type event type
+     * @return all event listeners for specified event
+     */
+    private @NotNull HandlerList getEventListeners(@NotNull Class<? extends Event> type) {
         try {
             Method e = this.getRegistrationClass(type).getDeclaredMethod("getHandlerList");
             e.setAccessible(true);
             return (HandlerList) e.invoke(null, new Object[0]);
-        } catch (Exception arg2) {
-            throw new RuntimeException(arg2.toString());
+        } catch (Exception e) {
+            throw new RuntimeException(e.toString());
         }
     }
 
 
+    /**
+     * @param clazz event type
+     * @return event class that registers listeners.
+     */
     private Class<? extends Event> getRegistrationClass(Class<? extends Event> clazz) {
         try {
             clazz.getDeclaredMethod("getHandlerList");
