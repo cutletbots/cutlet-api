@@ -13,7 +13,7 @@ repositories {
 
 dependencies {
 
-    api("com.github.BlcDragon:objconfig:v1.0.0")
+    api("com.github.BlcDragon:objconfig:2.0.0")
 
     //annotations
     api("org.jetbrains:annotations:22.0.0")
