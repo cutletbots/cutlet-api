@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "ru.cutletbots"
-version = "1.0.0"
+version = "1.0.1"
 
 repositories {
     mavenCentral()
@@ -14,6 +14,7 @@ repositories {
 dependencies {
 
     api("com.github.BlcDragon:objconfig:2.0.0")
+    api("it.unimi.dsi:fastutil:8.2.2")
 
     //annotations
     api("org.jetbrains:annotations:22.0.0")
@@ -61,8 +62,17 @@ tasks {
     }
 }
 
+tasks.withType<Jar> {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
 tasks.withType<Test> {
     useJUnit()
+}
+
+tasks.withType<JavaCompile> {
+    sourceCompatibility = "16"
+    targetCompatibility = "16"
 }
 
 publishing {
