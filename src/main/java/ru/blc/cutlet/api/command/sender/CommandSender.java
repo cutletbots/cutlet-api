@@ -58,22 +58,45 @@ public interface CommandSender {
     /**
      * Send message for this command sender<br>
      * Message should be sent to same dialog that message executed calls with this command sender<br>
-     * If {@link #isDeleteIfPM()} is {@code true} and {@link DialogType} is private, message should be deleted for bot
-     * @param message message to send
+     * If {@link #isDeleteIfPM()} is {@code true} and {@link DialogType} is private, message should be deleted for bot (if supported)
+     * @param message message to send, since 1.1 formatting should be escaped by implementation
+     * @see #escapeFormatting(String)
+     * @see #sendFormattedMessage(String)
      */
     void sendMessage(String message);
 
     /**
+     * Send message for this command sender<br>
+     * Message should be sent to same dialog that message executed calls with this command sender<br>
+     * If {@link #isDeleteIfPM()} is {@code true} and {@link DialogType} is private, message should be deleted for bot (if supported)
+     * @param message message to send with formatting symbols
+     * @since 1.1
+     */
+    default void sendFormattedMessage(String message) {
+        sendMessage(message);
+    }
+
+    /**
      * Send message for this command sender and delete it for bot
-     * @param message message to send
+     * @param message message to send, since 1.1 formatting should be escaped by implementation
      * @apiNote Not all implementations can support this
      */
     void sendAndDeleteMessage(String message);
 
     /**
+     * Send message for this command sender and delete it for bot
+     * @param message message to send with formatting symbols
+     * @apiNote Not all implementations can support this
+     * @since 1.1
+     */
+    default void sendAndDeleteFormattedMessage(String message) {
+        sendAndDeleteMessage(message);
+    }
+
+    /**
      * Send message for this command sender<br>
      * Message should be sent to same dialog that message executed calls with this command sender<br>
-     * If {@link #isDeleteIfPM()} is {@code true} and {@link DialogType} is private, message should be deleted for bot
+     * If {@link #isDeleteIfPM()} is {@code true} and {@link DialogType} is private, message should be deleted for bot (if supported)
      * @param message message to send
      */
     void sendMessage(Object message);
@@ -94,4 +117,14 @@ public interface CommandSender {
      * @return Dialog type of this command sender
      */
     DialogType getDialogType();
+
+    /**
+     * Escapes formatting symbols for current messengers
+     * @param rawText non-escaped text
+     * @return escaped text
+     * @since 1.1
+     */
+    default String escapeFormatting(String rawText) {
+        return getMessenger().escaped(rawText);
+    }
 }
