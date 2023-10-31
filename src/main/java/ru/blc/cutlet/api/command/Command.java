@@ -108,6 +108,7 @@ public class Command {
         }
         if (!isAllowed(sender.getMessenger())) {
             sender.sendMessage(Cutlet.instance().getTranslation("unsupported_messenger"));
+            return;
         }
         try {
             getCommandExecutor().onCommand(this, sender, alias, args);
