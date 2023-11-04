@@ -18,4 +18,8 @@ public interface Plugin {
     void setEnabled(boolean enabled);
 
     boolean isLoaded();
+
+    static <T extends Plugin> T get(Class<T> clazz) {
+        return Cutlet.instance().getPlugin(clazz);
+    }
 }

@@ -3,11 +3,14 @@ package ru.blc.cutlet.api.bot;
 import com.google.common.base.Preconditions;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnmodifiableView;
 import ru.blc.cutlet.api.Cutlet;
+import ru.blc.cutlet.api.Plugin;
 import ru.blc.cutlet.api.command.Command;
 import ru.blc.cutlet.api.event.*;
 import ru.blc.cutlet.api.event.bot.BotDisabledEvent;
 import ru.blc.cutlet.api.event.bot.BotEnabledEvent;
+import ru.blc.cutlet.api.module.Module;
 import ru.blc.objconfig.yml.YamlConfiguration;
 
 import java.io.File;
@@ -25,7 +28,7 @@ import java.util.stream.Collectors;
 public class BotManager {
 
     private final Cutlet cutlet;
-    private final Map<Bot, Map<String, Command>> commandsByBots = new HashMap<>();
+    private final Map<Plugin, Map<String, Command>> commandsByBots = new HashMap<>();
 
     private final Map<String, Bot> bots = new HashMap<>();
     private Map<String, BotDescription> toLoad = new HashMap<>();
@@ -42,24 +45,24 @@ public class BotManager {
      * Register command<br>
      * If command name or at least one command alias is already taken by other command - command would not register
      *
-     * @param bot     command owner
+     * @param plugin  command owner
      * @param command command
      * @return true, if command registered, otherwise false
      */
-    public boolean registerCommand(Bot bot, @NotNull Command command) {
-        if (bot != null && !bot.isEnabled()) {
-            getCutlet().getLogger().warn("{} attempted to register commands while not enabled!", bot.getName());
+    public boolean registerCommand(Plugin plugin, @NotNull Command command) {
+        if (plugin != null && !plugin.isEnabled()) {
+            getCutlet().getLogger().warn("{} attempted to register commands while not enabled!", plugin.getName());
             return false;
         }
-        if (commandsByBots.computeIfAbsent(bot, b -> new HashMap<>()).containsKey(command.getName().toLowerCase(Locale.ROOT)))
+        if (commandsByBots.computeIfAbsent(plugin, b -> new HashMap<>()).containsKey(command.getName().toLowerCase(Locale.ROOT)))
             return false;
         for (String alias : command.getAliases()) {
-            if (commandsByBots.computeIfAbsent(bot, b -> new HashMap<>()).containsKey(alias.toLowerCase(Locale.ROOT)))
+            if (commandsByBots.computeIfAbsent(plugin, b -> new HashMap<>()).containsKey(alias.toLowerCase(Locale.ROOT)))
                 return false;
         }
-        commandsByBots.computeIfAbsent(bot, b -> new HashMap<>()).put(command.getName().toLowerCase(Locale.ROOT), command);
+        commandsByBots.computeIfAbsent(plugin, b -> new HashMap<>()).put(command.getName().toLowerCase(Locale.ROOT), command);
         for (String alias : command.getAliases()) {
-            commandsByBots.computeIfAbsent(bot, b -> new HashMap<>()).put(alias.toLowerCase(Locale.ROOT), command);
+            commandsByBots.computeIfAbsent(plugin, b -> new HashMap<>()).put(alias.toLowerCase(Locale.ROOT), command);
         }
         return true;
     }
@@ -142,6 +145,10 @@ public class BotManager {
             }
         }
         return r;
+    }
+
+    public @UnmodifiableView Map<String, Bot> getBots(){
+        return Collections.unmodifiableMap(this.bots);
     }
 
     public void detectBots(File folder) {

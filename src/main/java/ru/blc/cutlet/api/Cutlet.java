@@ -20,6 +20,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Properties;
+import java.util.stream.Stream;
 
 public class Cutlet {
 
@@ -212,5 +213,16 @@ public class Cutlet {
      */
     public <T extends Module> T getModule(Class<T> clazz) {
         return getModuleLoader().getModule(clazz);
+    }
+
+    public <T extends Plugin> T getPlugin(Class<T> clazz) {
+        //noinspection unchecked
+        return Stream.concat(
+                        getModuleLoader().getModules().values().stream(),
+                        getBotManager().getBots().values().stream())
+                .filter(p -> p.getClass() == clazz)
+                .map(p -> (T) p)
+                .findAny()
+                .orElse(null);
     }
 }

@@ -1,6 +1,7 @@
 package ru.blc.cutlet.api.module;
 
 import com.google.common.base.Preconditions;
+import org.jetbrains.annotations.UnmodifiableView;
 import ru.blc.cutlet.api.Cutlet;
 import ru.blc.objconfig.yml.YamlConfiguration;
 
@@ -42,6 +43,10 @@ public class ModuleLoader {
             }
         }
         return r;
+    }
+
+    public @UnmodifiableView Map<String, Module> getModules(){
+        return Collections.unmodifiableMap(this.modules);
     }
 
     public void detectModules(File folder) {

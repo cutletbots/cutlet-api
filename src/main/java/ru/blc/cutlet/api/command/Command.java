@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 import ru.blc.cutlet.api.Cutlet;
+import ru.blc.cutlet.api.Plugin;
 import ru.blc.cutlet.api.bot.Bot;
 import ru.blc.cutlet.api.command.sender.CommandSender;
 import ru.blc.cutlet.api.command.sender.DialogType;
@@ -30,7 +31,7 @@ public class Command {
     @NotNull
     private final DialogType dialogType;
     private final String[] aliases;
-    private final Bot owner;
+    private final Plugin owner;
     private Messenger[] allowedMessengers;
 
     private CommandExecutor executor;
@@ -44,7 +45,7 @@ public class Command {
      * @param usage       command usage
      * @param aliases     aliases
      */
-    public Command(Bot owner, @NotNull DialogType dialogType, @NotNull String name, @Nullable String permission,
+    public Command(Plugin owner, @NotNull DialogType dialogType, @NotNull String name, @Nullable String permission,
                    @Nullable String description, @Nullable String usage, String... aliases) {
         this.owner = owner;
         this.name = name;
@@ -62,7 +63,7 @@ public class Command {
     /**
      * @return Owner of this command. Null for cutlet console commands
      */
-    public @Nullable Bot getOwner() {
+    public @Nullable Plugin getOwner() {
         return owner;
     }
 

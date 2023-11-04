@@ -2,6 +2,7 @@ package ru.blc.cutlet.api.console;
 
 import org.slf4j.Logger;
 import ru.blc.cutlet.api.Cutlet;
+import ru.blc.cutlet.api.bean.ChatUser;
 import ru.blc.cutlet.api.bot.Bot;
 import ru.blc.cutlet.api.bot.BotManager;
 import ru.blc.cutlet.api.command.Command;
@@ -78,6 +79,11 @@ public class Console implements ConsoleCommandSender {
 
     @Override
     public Bot getBot() {
+        return null;
+    }
+
+    @Override
+    public ChatUser getUserSender() {
         return null;
     }
 

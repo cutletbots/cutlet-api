@@ -1,7 +1,11 @@
 package ru.blc.cutlet.api.command.sender;
 
+import ru.blc.cutlet.api.bean.ChatUser;
 import ru.blc.cutlet.api.bot.Bot;
 import ru.blc.cutlet.api.command.Messenger;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Entity that can send command.<br/>
@@ -13,6 +17,11 @@ public interface CommandSender {
      * @return bot owning this command sender. For console is {@code null}
      */
     Bot getBot();
+
+    /**
+     * @return ChatUser that send command
+     */
+    ChatUser getUserSender();
 
     /**
      * Permission check for this sender
@@ -117,6 +126,13 @@ public interface CommandSender {
      * @return Dialog type of this command sender
      */
     DialogType getDialogType();
+
+    /**
+     * Extracts selected targets from current command sender<br/>
+     * @param filter way for extract targets, nothing for all variants
+     * @return targets or empty list
+     */
+    default List<TargetSearchResult> extractTargets(TargetSearchResult.FindCase...filter) {return Collections.emptyList();}
 
     /**
      * Escapes formatting symbols for current messengers
