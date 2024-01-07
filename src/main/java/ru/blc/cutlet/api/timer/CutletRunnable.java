@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
 
 public abstract class CutletRunnable implements Runnable {
 
-    private CutletTask task;
+    CutletTask task;
 
     public CutletTask getTask() {
         return task;

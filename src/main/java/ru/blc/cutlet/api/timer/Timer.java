@@ -69,6 +69,9 @@ public class Timer {
         Preconditions.checkState(plugin.isEnabled(), plugin.getName() + " attempted to start task while not enabled!");
         CutletTask task = new CutletTask(this, plugin, runnable, delay, timeUnit, false);
         tasksQueue.add(task);
+        if (runnable instanceof CutletRunnable cutletRunnable) {
+            cutletRunnable.task = task;
+        }
 
         tasksByPlugin.computeIfAbsent(plugin, p -> new HashSet<>()).add(task);
         return task;
@@ -86,6 +89,10 @@ public class Timer {
         Preconditions.checkState(plugin.isEnabled(), plugin.getName() + " attempted to start task while not enabled!");
         CutletTask task = new CutletTask(this, plugin, runnable, delay, timeUnit, true);
         tasksQueue.add(task);
+        if (runnable instanceof CutletRunnable cutletRunnable) {
+            cutletRunnable.task = task;
+        }
+
         tasksByPlugin.computeIfAbsent(plugin, p -> new HashSet<>()).add(task);
         return task;
     }
